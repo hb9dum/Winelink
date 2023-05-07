@@ -181,7 +181,7 @@ function run_main()
 				case $ARCH in # determine 32-bit or 64-bit Ubuntu
 				"ARM32")
 				        clear
-					echo -e "ERROR: For Libre Comouter only 64 bit architecture is supported
+					echo -e "ERROR: For Libre Comouter only 64 bit architecture is supported"
 					run_giveup
 					;; #/"ARM32")
 				"ARM64")
