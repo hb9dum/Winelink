@@ -168,6 +168,26 @@ function run_main()
 					;; #/"ARM64")
 				esac #/case $ARCH
 				;; #/"raspbian"|"debian")
+		"LibreComputer")
+			case $ID in
+			"debian") # Libre Computer with debian OS. 
+				case $ARCH in # determine 32-bit or 64-bit Ubuntu
+				"ARM32")
+					echo -e "ERROR: For Libre Comouter only 64 bit architecture is supported
+					run_giveup
+					;; #/"ARM32")
+				"ARM64")
+					run_greeting "${SBC_SERIES} ${ARCH} " "10" "2.8" "${ARG}"
+					run_checkdiskspace "2100" #min space required in MB
+					#run_downloadbox86 "14113faa_rk3399"
+					run_buildbox86 "14113faabace7f8f8c6a7d0bb5f6e2fea36c43f1" "ARM64" "ARM64" #takes longer than downloading
+					#run_Sideload_i386wine "devel" "7.7" "ubuntu" "${VERSION_CODENAME}" "-1" # THIS IS BROKEN FOR SOME REASON
+					run_Sideload_i386wine "devel" "7.7" "debian" "bullseye" "-1" 
+					run_Install_i386wineDependencies_Ubuntu64bit #should work on debian, too
+					#run_Install_i386wineDependencies_RpiOS64bit
+					;; #/"ARM64")
+				esac #/case $ARCH
+				;; #/"debian")
 			*)
 				clear
 				echo -e "ERROR: For Raspberry Pi's, only RPiOS is supported by Winelink at this time.\nGiving up on install."
@@ -553,7 +573,10 @@ function run_buildbox86() # Compile box64 & box86 on-device (takes a long time, 
 			elif [ "${series}" = "RK3399" ]; then
 				cmake .. -D${series}=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo
 				echo "Compiling box86 for RK3399 on ${arch}"
-			else
+		        elif [ "${series}" = "ARM64" ]; then
+				cmake .. -D${series}=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo 
+				echo "Compiling box86 for generic 64 bit linux on ${arch}"
+		        else
 				cmake .. -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo
 				echo "Compiling box86 for unknown SBC on ${arch}"
 			fi
@@ -2313,6 +2336,9 @@ function run_detect_othersbc()
 	# Categorize the SBC into a series
 	if [ "$model" = "OrangePi 4 LTS" ] || [ "$model" = "OrangePi 4" ]; then
 		SBC_SERIES=OrangePi4
+		
+        elif [ "$model" = "Libre Computer AML-S905X-CC" ]; then
+		SBC_SERIES=LibreComputer
 	fi
 	echo -e "\nThis SBC is part of the ${SBC_SERIES} series."
 }
