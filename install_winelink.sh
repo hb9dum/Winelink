@@ -168,11 +168,19 @@ function run_main()
 					;; #/"ARM64")
 				esac #/case $ARCH
 				;; #/"raspbian"|"debian")
+			*)
+				clear
+				echo -e "ERROR: For Raspberry Pi's, only RPiOS is supported by Winelink at this time.\nGiving up on install."
+				run_giveup
+				;; #/*)
+			esac #/case $ID
+			;; #/"OrangePi4")
 		"LibreComputer")
 			case $ID in
 			"debian") # Libre Computer with debian OS. 
 				case $ARCH in # determine 32-bit or 64-bit Ubuntu
 				"ARM32")
+				        clear
 					echo -e "ERROR: For Libre Comouter only 64 bit architecture is supported
 					run_giveup
 					;; #/"ARM32")
@@ -190,11 +198,11 @@ function run_main()
 				;; #/"debian")
 			*)
 				clear
-				echo -e "ERROR: For Raspberry Pi's, only RPiOS is supported by Winelink at this time.\nGiving up on install."
+				echo -e "ERROR: For LibreComputer, only debian is supported by Winelink at this time.\nGiving up on install."
 				run_giveup
 				;; #/*)
 			esac #/case $ID
-			;; #/"OrangePi4")
+			;; #/"LibreComputer")
 		*)
 			clear
 			if [[ $SBC_SERIES == *"RPi"* ]]; then
